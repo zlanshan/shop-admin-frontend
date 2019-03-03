@@ -33,15 +33,15 @@ export default {
       menus:[
           {
             icon:'el-icon-menu',title:'购物商城',
-            group:[{src:'#',content:'商品管理'},{src:'#',content:'栏目管理'}]
+            group:[{src:'/admin/goodslist',content:'商品管理'},{src:'/admin/categorylist',content:'栏目管理'}]
           },
           {
             icon:'el-icon-service',title:'会员管理',
-            group:[{src:'#',content:'会员列表'}]
+            group:[{src:'/admin/accountlist',content:'会员列表'}]
           },
           {
             icon:'el-icon-tickets',title:'商城订单',
-            group:[{src:'#',content:'订单列表'}]
+            group:[{src:'/admin/orderlist',content:'订单列表'}]
           },
       ]
     };

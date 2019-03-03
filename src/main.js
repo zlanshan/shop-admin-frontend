@@ -11,6 +11,10 @@ import VueRouter from 'vue-router';
 // vue可以省略
 import Login from './pages/Login.vue';
 import Admin from './pages/Admin.vue';
+import Goodslist from './pages/goods/GoodsList.vue';
+import Categorylist from './pages/category/CategoryList.vue';
+import Accountlist from './pages/accountlist/AccountList.vue';
+import Orderlist from './pages/orderlist/OrderList.vue';
 // 全局注册组件
 Vue.use(ElementUI);
 // 注册插件
@@ -23,7 +27,16 @@ var routes = [
         path: '/login',
         component: Login,
         meta: '登录页'
-    }, { path: '/admin', component: Admin, meta: '首页' }
+    }, {
+        path: '/admin',
+        component: Admin,
+        meta: '管理后台',
+        children: [{ path: 'goodslist', component: Goodslist, meta: '商城管理' },
+            { path: 'categorylist', component: Categorylist, meta: '栏目管理' },
+            { path: 'accountlist', component: Accountlist, meta: '会员列表' },
+            { path: 'orderlist', component: Orderlist, meta: '订单管理' }
+        ]
+    }
 ]
 
 var router = new VueRouter({ routes });

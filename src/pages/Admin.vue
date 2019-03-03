@@ -8,7 +8,11 @@
           </el-aside>
       <el-container>
         <el-header><admin-header @onchange='handleE'></admin-header></el-header>
-        <el-main>Main</el-main>
+        <el-main>
+          <!-- :dataSource这就是一个数组，如何传到子组件中，，props传值 -->
+          <admin-breadcrump :dataSource='bread'></admin-breadcrump>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -17,6 +21,8 @@
 <script>
 import Aside from '../components/Aside';
 import Header from '../components/Header';
+import Breadcrump from '../components/Breadcrump';
+
 export default {
   data(){
     // 父组件船只给子组件，，父组件的值又是通过触发事件后值更改了，因而还需绑定个父子组件事件传递采纳数
@@ -24,13 +30,24 @@ export default {
   },
     components:{
         'admin-aside':Aside,
-        'admin-header':Header
+        'admin-header':Header,
+        'admin-breadcrump':Breadcrump
     },
     methods:{
       // 在这直接设置值取反，再到子组件中设置触发该事件后，传事件的方法
       handleE:function () {
         this.isCollapse=!this.isCollapse;
         }
+    },
+    computed:{
+      // 计算监听 属性，computed用法是在概要设置的标签上添加属性值为bread，属性名就为传值的子组件的props
+      bread(){
+        // 返回数组，这个数组是this.$route.matched中的meta的信息，根据路径的多少获取几个meta信息
+        var arr=this.$route.matched.map(function (v) {return v.meta  });
+        // computed是返回数据的 
+        return arr; 
+        }
+      
     }
 };
 </script>
