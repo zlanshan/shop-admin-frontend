@@ -2,7 +2,7 @@
   <div id="app">
     
      <!-- <login-a></login-a> -->
-    
+    <router-view></router-view>
     
   </div>
 </template>
@@ -18,11 +18,11 @@ export default {
   //   'login-a':Login
   // },
 
-  mounted(){
- this.$axios.get('https://api.github.com/users').then(res=>{
-       console.log(res.data);
-  })
-  }
+//   mounted(){
+//  this.$axios.get('https://api.github.com/users').then(res=>{
+//        console.log(res.data);
+//   })
+//   }
  
 }
 </script>
