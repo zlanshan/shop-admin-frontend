@@ -4,10 +4,10 @@
       <el-aside width="auto">
         <!-- 预留logo的位置 -->
         <div class="logo"></div>
-          <admin-aside></admin-aside>
+          <admin-aside :isCollapse='isCollapse'></admin-aside>
           </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header><admin-header @onchange='handleE'></admin-header></el-header>
         <el-main>Main</el-main>
       </el-container>
     </el-container>
@@ -16,9 +16,21 @@
 
 <script>
 import Aside from '../components/Aside';
+import Header from '../components/Header';
 export default {
+  data(){
+    // 父组件船只给子组件，，父组件的值又是通过触发事件后值更改了，因而还需绑定个父子组件事件传递采纳数
+    return { isCollapse: false}
+  },
     components:{
-        'admin-aside':Aside
+        'admin-aside':Aside,
+        'admin-header':Header
+    },
+    methods:{
+      // 在这直接设置值取反，再到子组件中设置触发该事件后，传事件的方法
+      handleE:function () {
+        this.isCollapse=!this.isCollapse;
+        }
     }
 };
 </script>
@@ -36,6 +48,8 @@ export default {
     color: #333;
     text-align: center;
     line-height: 60px;
+    padding:0 20px;
+     /* background-color: #eee; */
   }
   
   .el-aside {

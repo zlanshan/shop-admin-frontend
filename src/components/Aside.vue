@@ -26,9 +26,10 @@
 </template>
 <script>
 export default {
+    props:['isCollapse'],
   data() {
     return {
-      isCollapse: false,
+     
       menus:[
           {
             icon:'el-icon-menu',title:'购物商城',
