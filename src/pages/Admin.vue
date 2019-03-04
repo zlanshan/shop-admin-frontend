@@ -43,6 +43,7 @@ export default {
       // 计算监听 属性，computed用法是在概要设置的标签上添加属性值为bread，属性名就为传值的子组件的props
       bread(){
         // 返回数组，这个数组是this.$route.matched中的meta的信息，根据路径的多少获取几个meta信息
+        // console.log(this.$route.matched);
         var arr=this.$route.matched.map(function (v) {return v.meta  });
         // computed是返回数据的 
         return arr; 
@@ -84,7 +85,7 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    line-height: 40px;
   }
   /* 设置height：100%继承admin-container中的高度 */
   body .el-container {
