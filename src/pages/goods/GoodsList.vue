@@ -22,9 +22,16 @@
       style="width: 100%"
       class="mt20">
      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column label="标题" width="400" prop="title">
+      <el-table-column label="标题" width="350">
         <!-- template时存放自定义的列设置 -->
-        <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
+        <template slot-scope="scope" style='margin-bottom:0'>
+          <!-- 需要在一行显示时，，需要用el-row -->
+          <el-row type='flex' align='middle'>
+            <img :src="`${scope.row.imgurl}`" alt="" class='goods_img'>
+          <span>{{scope.row.title}}</span>
+          </el-row>
+         
+          </template>
       </el-table-column>
       <!-- 每一列的数据, prop定义数据结构对象要显示的属性 -->
       <el-table-column prop="categoryname" label="类型" width="120"></el-table-column>
@@ -192,5 +199,14 @@ export default {
 }
 .block{
   text-align: left;
+}
+
+.goods_img{
+  width:64px;
+  height: 64px;
+  display: block;
+  margin-right: 10px;
+  /* 图片和文字放置在一行容易被挤压 */
+  flex-shrink: 0;
 }
 </style>

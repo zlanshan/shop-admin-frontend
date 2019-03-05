@@ -233,7 +233,7 @@ export default {
 }
 .autocreate>.tips{
     display: block;
-    width:402px;
+    width:337px;
         text-align: left;
         font-size: 12px;
         margin-left:10px;
