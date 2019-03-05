@@ -44,7 +44,7 @@ export default {
       bread(){
         // 返回数组，这个数组是this.$route.matched中的meta的信息，根据路径的多少获取几个meta信息
         // console.log(this.$route.matched);
-        var arr=this.$route.matched.map(function (v) {return v.meta  });
+        var arr=this.$route.matched.map(function (v) {return {src:v.path,title:v.meta }});
         // computed是返回数据的 
         return arr; 
         }

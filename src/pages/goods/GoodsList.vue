@@ -1,168 +1,196 @@
 <template>
-    <div>
-        <el-row class='option'> 
-           <div class="adddel">
-             <el-button plain @click='handleAdd'>新增</el-button>  <el-button plain>删除</el-button>
+  <div>
+    <!-- 新增删除的flex的layout布局 -->
+    <el-row type="flex" justify="space-between" align="middle" class="mt20">
+      <div >
+        <el-button @click="handleAdd">新增</el-button>
+        <el-button @click="handleDel(idstr)">删除</el-button>
+      </div>
+      <div>
+        <el-input placeholder="请输入内容" v-model='searchValue' class="input-with-select">
+          <el-button slot="append" icon="el-icon-search" @click='handleSearch(searchValue)'></el-button>
+        </el-input>
+      </div>
+    </el-row>
 
-           </div>
-       <div class="search">
- <el-input
-  placeholder="请输入内容"
- 
-  clearable class='content'>
-  </el-input>
-<el-button  icon="el-icon-search"></el-button>
-       </div>  
-        </el-row>
-
-         <el-table
-    ref="multipleTable"
-    :data="tableData"
-    tooltip-effect="dark"
-    style="width: 100%"
-    @selection-change="handleSelectionChange">
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      label="标题"
-      width="400">
-      <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
-    </el-table-column>
-    <el-table-column
-      prop="categoryname"
-      label="类型"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="market_price"
-      label="价格"
-      show-overflow-tooltip>
-    </el-table-column>
-     <el-table-column
-      label="操作" align='right'
-      show-overflow-tooltip>
-      <template>
-          <el-button  size='mini'>编辑</el-button>
-          <el-button type='danger' size='mini'>删除</el-button>
+    <!-- 表格的 -->
+    <!-- data用于接收表格数据，tableData是data中的数据，由后台返回的 -->
+     <el-table
+     :data="tableData"
+     tooltip-effect="dark"
+      @selection-change="handleSelectionChange"
+      style="width: 100%"
+      class="mt20">
+     <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column label="标题" width="400" prop="title">
+        <!-- template时存放自定义的列设置 -->
+        <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
+      </el-table-column>
+      <!-- 每一列的数据, prop定义数据结构对象要显示的属性 -->
+      <el-table-column prop="categoryname" label="类型" width="120"></el-table-column>
+      <el-table-column prop="market_price" label="价格" show-overflow-tooltip>
+        <!-- 自定义模板, slot-scope属性可以获取当前每一行数据，数据是一个对象，scoped.row可获取该对象-->
+        <template slot-scope="scope">
+            <span>{{scope.row.market_price  |  tofixed }}</span>
+        </template>
+      </el-table-column>
+    
+    <el-table-column label="操作">
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          @click="handleDel(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
-  
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[5, 10, 15, 20]"
-      :pager-count="pageCount"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="totalCount" class="block" >
-    </el-pagination>
+   
+      <!-- 分页组件 -->
+    <!-- size-change: 切换页面数据显示条数的时候触发 -->
+    <!-- current-change： 切换页面时候触发 -->
+    <!-- current-page 代表当前页 -->
+    <!-- total: 数据的总条数 -->
+   <div class="block mt20">
+      <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageIndex"
+            :page-sizes="[5, 10, 15, 20]" 
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+          >
+      </el-pagination>
+      <!-- 这是设置最多可显示几页的 -->
+     <!-- :pager-count='pageCount' -->
+   </div>
+   
   </div>
- 
 </template>
 
 <script>
-  export default {
-       
-   
-    data() {
-      return {
-        tableData: [],
-        multipleSelection: [],
-        currentPage:1,
-        pageCount:5,
-        pageSize:5,
-       totalCount:0
-      }
+export default {
+  data() {
+    return {
+      tableData: [],
+      multipleSelection: [],
+      // 搜索条件
+      searchValue:'',
+      // 当前的页面
+      pageIndex: 1,
+      // pageCount: 5,
+      // 当前显示的条数
+      pageSize: 5,
+      // 数据总条数
+      totalCount: 0,
+      idstr:''
+    };
+  },
+
+  methods: {
+    // 切换显示条数时触发
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getList();
     },
- 
-    methods: {
-         handleSizeChange(val) {
-        this.pageSize=val;
-
-      },
-      handleCurrentChange(val) {
-      this.currentPage=val;
-      },
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-     handleAdd(){
-         this.$router.push('/admin/goodsadd');
-     },  getList(){
-        this.$axios({
-            method:'get',
-            url:'/admin/goods/getlist',
-            params:{
-                currentPage:this.currentPage,
-                pageSize:this.pageSize,
-
-            }
-        }).then(res=>{
-            console.log(res);
-            const {message,currentPage,pageSize,totalCount}=res.data;
-            this.tableData=message;
-            this.currentPage=currentPage;
-            this.pageSize=pageSize;
-            this.totalCount=totalCount;
+    // 切换页数触发
+    handleCurrentChange(val) {
+      this.pageIndex = val;
+      this.getList();
+    },
+    // 处理多选框的,element-ui设置的可以直接获取选中的哪一行的数据信息，获取id设置删除操作的
+    handleSelectionChange(val) {
+        // console.log(val);
+        var ids=val.map(v=>{
+          return v.id;
         })
-    }
+        var idstr=ids.join(',');
+        // return idstr;
+        this.idstr=idstr;
+      },
+    // 新增商品跳转页面
+    handleAdd() {
+      this.$router.push("/admin/goodsadd");
     },
-  
-    // mounted(){
-	// 		this.getList();
-	// 	}
-   
+    // 删除数据的
+    handleDel(ids){
+     this.$axios.get(`/admin/goods/del/${ids}`).then(res=>{
+       if(res.data.status==0){
+           this.$message({message:res.data.message,type:'success'});
+           this.getList();
+       }
+     })
+    },
+    // 搜索数据
+    handleSearch(str){
+       this.pageIndex=1;
+       this.getList();
+    },
+    // 
+    getList() {
+      // 请求商品类别数据
+      // this.$axios.get(`http://localhost:8899/admin/goods/getlist?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}&searchvalue=${this.searchvalue}`).then(res=>{})
+      this.$axios({
+        method: "get",
+        url: "/admin/goods/getlist",
+        // 传递的参数
+        params: {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize,
+          searchvalue:this.searchValue
+        }
+      }).then(res => {
+        // console.log(res);
+        // 解构获取res内的各种值？相当于这个data=res.data
+        // 获取返回的数据
+        const {data}=res;
+        // const { message, currentPage, pageSize, totalCount } = res.data;
+      //  表格的数据
+       this.tableData = data.message;
+        // this.pageIndex = data.pageIndex;
+        // this.pageSize = data.pageSize;
+        // 修改总条数
+        this.totalCount = data.totalcount;
+      });
+    }
+  },
+
+// 生命周期函数
+  mounted(){
+  		this.getList();
+    },
+
+    // 过滤器
+  filters:{
+    tofixed:function (data) {
+     return Number(data).toFixed(2);
+      }
   }
+};
 </script>
 
 <style>
-.option{
-    margin-top:30px;
-    width:100%;
-    /* 这是两边都设置了宽度，但是没有flex的值，他就不能展示想要的justify-content的形式，
+/* .option {
+  margin-top: 30px;
+  width: 100%; */
+  /* 这是两边都设置了宽度，但是没有flex的值，他就不能展示想要的justify-content的形式，
     最后还得设置位置更改的，这就直接用定位也可 */
-    /* display: flex;
+  /* display: flex;
     justify-content: space-between; */
-    height:40px;
-}
-.content{
-    width:200px;
-    display: block;
-    height: 40px;
-}
-
-.adddel{
-    width: 150px;
-    position: absolute;
-    left:0;
-}
-.search{
-    width: 256px;
-    display: flex;
-    position: absolute;
-    right: 0;
-
-}
-.content >.el-input__inner{
-    display: block;
-    position: absolute;
-    left: 0;
+  /* height: 40px;
+} */
+/* .content {
+  width: 200px;
+  display: block;
+  height: 40px;
+} */
+.el-pager li{
+  width:20px;
 }
 .block{
-    text-align: left;
-    margin-top:10px;
+  text-align: left;
 }
 </style>
