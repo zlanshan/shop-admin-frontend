@@ -2,9 +2,11 @@
  
     
     <el-menu
-      default-active="1-4-1"
+      default-active="1-1"
       class="el-menu-vertical-demo"   
       :collapse="isCollapse"
+       text-color="#fff"
+      active-text-color="#f00"
     >
 
       <el-submenu v-for='(item,index) in menus' :key='index' :index="`${index+1}`">
@@ -72,6 +74,10 @@ export default {
     background: #000c18;
    
 }
+/* .el-menu-item .is_active{
+  color:yellow;
+} */
+
 .el-submenu .el-menu-item> a{
         cursor:pointer;
         color:#aaa;

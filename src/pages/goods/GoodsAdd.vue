@@ -17,6 +17,10 @@
         <el-switch v-model="ruleForm.delivery"></el-switch>
         <span class="tips">*不发布前台则无法显示</span>
       </el-form-item>
+        <el-form-item label="推荐类型" class='status'>
+            <el-checkbox >置顶</el-checkbox>
+            <el-checkbox >热门</el-checkbox>
+        </el-form-item>
       <el-form-item label="内容标题">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
@@ -36,23 +40,46 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item label="商品编号" class='number'>
+      <el-form-item label="商品货号" class='number'>
+        <el-input v-model="ruleForm.name" ></el-input>
+      </el-form-item>
+      <el-form-item label="库存数量"  class='goodsnumber'>
+        <el-input v-model="ruleForm.name"></el-input>
+        <div class='autocreate'>
+        <span class="tips">*我不确定要不要自动生成</span>
+        </div>
+      </el-form-item>
+      <el-form-item label="市场价格" class='number'>
         <el-input v-model="ruleForm.name" ></el-input>
       </el-form-item>
       <el-form-item label="销售价格"  class='number'>
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
-
-      <el-form-item label="内容描述" class="editor">
-        <quillEditor v-model="ruleForm.content"/>
-        <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
-      </el-form-item>
-      <el-form-item style='text-align:left'>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+      <el-form-item label="图片相册" >
+        <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove" class='avatar'>
+            <i class="el-icon-plus"></i>
+        </el-upload>
+     </el-form-item>
+    <el-dialog :visible.sync="dialogVisible">
+    <img width="100%"  alt="">
+    </el-dialog>
+    <el-form-item label="内容摘要">
+        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+    </el-form-item>
+    <el-form-item label="内容描述" class="editor">
+    <quillEditor v-model="ruleForm.content"/>
+    <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
+    </el-form-item>
+    <el-form-item style='text-align:left'>
+    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+    <el-button @click="resetForm('ruleForm')">取消</el-button>
+    </el-form-item>
+ </el-form>
+ </div>
 </template>
 <script>
 import 'quill/dist/quill.core.css';
@@ -191,7 +218,24 @@ export default {
     text-align: left;
 }
 .number{
-    width:600px;
+    width:500px;
     text-align: left;
+}
+.tips{
+    color:#bbb;
+    margin-left:10px;
+}
+
+.goodsnumber>.el-form-item__content{
+    display: flex;
+    height: 40px;
+
+}
+.autocreate>.tips{
+    display: block;
+    width:402px;
+        text-align: left;
+        font-size: 12px;
+        margin-left:10px;
 }
 </style>

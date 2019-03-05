@@ -44,8 +44,8 @@
       label="操作" align='right'
       show-overflow-tooltip>
       <template>
-          <el-button disabled size='mini'>编辑</el-button>
-          <el-button disabled size='mini'>删除</el-button>
+          <el-button  size='mini'>编辑</el-button>
+          <el-button type='danger' size='mini'>删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -121,9 +121,9 @@
     }
     },
   
-    mounted(){
-			this.getList();
-		}
+    // mounted(){
+	// 		this.getList();
+	// 	}
    
   }
 </script>

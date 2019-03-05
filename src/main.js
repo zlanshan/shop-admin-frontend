@@ -17,6 +17,7 @@ import Accountlist from './pages/accountlist/AccountList.vue';
 import Orderlist from './pages/orderlist/OrderList.vue';
 import Goodsadd from './pages/goods/GoodsAdd.vue';
 import Goodsedit from './pages/goods/GoodsEdit.vue';
+
 // 全局注册组件
 Vue.use(ElementUI);
 // 注册插件
