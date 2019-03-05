@@ -1,85 +1,112 @@
 <template>
-    <div><el-form ref="form" :model="form" label-width="80px">
-     <el-form-item label="订单id">
-     {{scope.row.id}}
-  </el-form-item>   
-  <el-form-item label="快递单号">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动名称">
-    <el-input v-model="form.name"></el-input>
-  </el-form-item>
-  <el-form-item label="活动区域">
-    <el-select v-model="form.region" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="活动时间">
-    <el-col :span="11">
-      <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="即时配送">
-    <el-switch v-model="form.delivery"></el-switch>
-  </el-form-item>
-  <el-form-item label="活动性质">
-    <el-checkbox-group v-model="form.type">
-      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-      <el-checkbox label="地推活动" name="type"></el-checkbox>
-      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-    </el-checkbox-group>
-  </el-form-item>
-  <el-form-item label="特殊资源">
-    <el-radio-group v-model="form.resource">
-      <el-radio label="线上品牌商赞助"></el-radio>
-      <el-radio label="线下场地免费"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="活动形式">
-    <el-input type="textarea" v-model="form.desc"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
-    <el-button>取消</el-button>
-  </el-form-item>
-</el-form></div>
+  <div>
+    <el-form ref="form" model='orderinfo' label-width="80px" class='mt20' style='text-align: left;'>
+      <el-form-item label="订单id">{{orderinfo.id}}</el-form-item>
+      <el-form-item label="快递单号">
+        <el-input v-model="orderinfo.express_no"></el-input>
+      </el-form-item>
+      <el-form-item label="快递费用">
+        <el-input v-model="orderinfo.express_fee"></el-input>
+      </el-form-item>
+      <el-form-item label="收件人" prop="accent_name">
+        <el-input v-model="orderinfo.accent_name"></el-input>
+      </el-form-item>
+      <el-form-item label="收货电话">
+        <el-input v-model="orderinfo.telphone"></el-input>
+      </el-form-item>
+      <el-form-item label="收货邮箱">
+        <el-input v-model="orderinfo.email"></el-input>
+      </el-form-item>
+      <el-form-item label="收货地区">
+        <el-input v-model="orderinfo.area"></el-input>
+      </el-form-item>
+      <el-form-item label="收货地址">
+        <el-input v-model="orderinfo.address"></el-input>
+      </el-form-item>
+      <!-- 这是要插入文本域的 -->
+       
+      <el-form-item label="收货备注">
+        <el-input  type="textarea" v-model="orderinfo.message"></el-input>
+      </el-form-item>
+      <el-form-item label="收货地区">
+        <el-input type='textarea' v-model="orderinfo.area"></el-input>
+      </el-form-item>
+      <el-form-item label="总金额">
+        <el-input v-model="orderinfo.order_amount"></el-input>
+      </el-form-item>
+       <el-form-item label="订单状态">
+        <el-input v-model="orderinfo.orderstatus"></el-input>
+      </el-form-item>
+      
+      <el-form-item style='text-align:left'>
+        <el-button type="primary" @click="onSubmit">立即创建</el-button>
+        <el-button>取消</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return {
-            id:''
-        }
-    },
-mounted(){
-    const id=this.$route.params.id;
-    this.id=id;
-     this.$axios.post(`/admin/order/updateorder/${id}`).then(res=>{
-        console.log(res);
-      })
-}
-}
+  data() {
+    return {
+      id: 0,
+      orderinfo:{
+      id:0,
+      express_no:'',
+      express_fee:'',
+      accept_name:'',
+      telphone:'',
+      mobile:'',
+      email:'',
+      area:'',
+      address:'',
+      message:'',
+      order_amount:'',
+      orderstatus:''
+      }
+    };
+  },
+  methods:{
+   onSubmit(){
+    //  因为orderinfo是动态变化的，这里就不用重新获取值的
+        // this.orderinfo=this.orderinfo;
+         // post请求传递参数是一个对象，如何获取id值的数据并将这数据全部渲染到页面上呢
+    this.$axios.post(`/admin/order/updateorder/`,{orderinfo:this.orderinfo}).then(res => {
+      console.log(res);
+      if(res.meta.status===0){
+        // ???
+        const {message} =res.data;
+        this.$message({
+          message:'修改成功',
+          type:'success'
+        })
+
+        setTimeout(()=>{
+          this.$router.back();
+        },1000)
+      }
+    });
+    }
+  },
+  mounted() {
+    const id = this.$route.params.id;
+    this.id = id;
+    this.$axios.get(`/admin/order/getorderdetial/${id}`).then(res=>{
+        // console.log(res);
+        const {message}=res.data;
+        this.orderinfo=message.orderinfo;
+        this.tableData=message.goodslist;
+       })
+    // console.log(id);
+   
+  }
+};
 </script>
 
-<style>
-
+<style scoped>
+.el-input{
+  width:80%;
+ 
+}
 </style>
