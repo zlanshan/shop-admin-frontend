@@ -14,9 +14,19 @@
 
 export default { 
   name: 'app',
-  // components:{
-  //   'login-a':Login
-  // },
+  mounted(){
+    this.$axios.get('/admin/account/islogin').then(res=>{
+      // console.log(res);
+      // 这个在每次刷新时都需要重新登录，接口有bug
+      if(res.data.code==='nologin'){
+        this.$message({
+          message:'请先登录',
+          type:'danger'
+        });
+        // this.$router.push('/login');
+      }
+    })
+  }
 
 //   mounted(){
 //  this.$axios.get('https://api.github.com/users').then(res=>{

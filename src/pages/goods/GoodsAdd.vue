@@ -1,20 +1,20 @@
 <template>
   <div class="add">
     <el-form
-      :model="ruleForm"
+      :model="formData"
       :rules="rules"
       ref="ruleForm"
       label-width="100px"
       class="demo-ruleForm"
     >
       <el-form-item label="所属类别">
-        <el-select v-model="ruleForm.region" placeholder="请选择" class='choose'>
+        <el-select v-model="formData.region" placeholder="请选择" class='choose'>
           <el-option label="区域一" value="shanghai"></el-option>
           <el-option label="区域二" value="beijing"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="是否发布" class='status'>
-        <el-switch v-model="ruleForm.delivery"></el-switch>
+        <el-switch v-model="formData.delivery"></el-switch>
         <span class="tips">*不发布前台则无法显示</span>
       </el-form-item>
         <el-form-item label="推荐类型" class='status'>
@@ -22,10 +22,10 @@
             <el-checkbox >热门</el-checkbox>
         </el-form-item>
       <el-form-item label="内容标题">
-        <el-input v-model="ruleForm.name"></el-input>
+        <el-input v-model="formData.name"></el-input>
       </el-form-item>
       <el-form-item label="副标题">
-        <el-input v-model="ruleForm.name"></el-input>
+        <el-input v-model="formData.name"></el-input>
       </el-form-item>
       <el-form-item label="封面图片" >
         <el-upload
@@ -35,48 +35,53 @@
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+         
+          <img v-if="imageUrl" :src="imageUrl"  class='avatar'>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
 
       <el-form-item label="商品货号" class='number'>
-        <el-input v-model="ruleForm.name" ></el-input>
+        <el-input v-model="formData.name" ></el-input>
       </el-form-item>
-      <el-form-item label="库存数量"  class='goodsnumber'>
-        <el-input v-model="ruleForm.name"></el-input>
+      <el-form-item label="库存数量"  class='number'>
+        <el-input v-model="formData.name"></el-input>
         <div class='autocreate'>
-        <span class="tips">*我不确定要不要自动生成</span>
+        <!-- <span class="tips">*我不确定要不要自动生成</span> -->
         </div>
       </el-form-item>
       <el-form-item label="市场价格" class='number'>
-        <el-input v-model="ruleForm.name" ></el-input>
+        <el-input v-model="formData.name" ></el-input>
       </el-form-item>
       <el-form-item label="销售价格"  class='number'>
-        <el-input v-model="ruleForm.name"></el-input>
+        <el-input v-model="formData.name"></el-input>
       </el-form-item>
-      <el-form-item label="图片相册" >
+
+      <el-form-item label="图片相册" style='text-align:left'>
         <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove" class='avatar'>
+            :on-remove="handleRemove">
             <i class="el-icon-plus"></i>
         </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src='dialogVisible' alt="">
+        </el-dialog>
      </el-form-item>
-    <el-dialog :visible.sync="dialogVisible">
-    <img width="100%"  alt="">
-    </el-dialog>
+      
+
     <el-form-item label="内容摘要">
-        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+        <el-input type="textarea" v-model="formData.desc"></el-input>
     </el-form-item>
+
     <el-form-item label="内容描述" class="editor">
-    <quillEditor v-model="ruleForm.content"/>
+    <quillEditor v-model="formData.content"/>
     <!-- <el-input type="textarea" v-model="ruleForm.desc"></el-input> -->
     </el-form-item>
     <el-form-item style='text-align:left'>
-    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-    <el-button @click="resetForm('ruleForm')">取消</el-button>
+    <el-button type="primary" @click="submitForm('formData')">立即创建</el-button>
+    <el-button @click="resetForm('formData')">取消</el-button>
     </el-form-item>
  </el-form>
  </div>
@@ -94,7 +99,9 @@ export default {
   data() {
     return {
       imageUrl: "",
-      ruleForm: {
+      dialogImageUrl: '',
+      dialogVisible: false,
+      formData: {
         name: "",
         region: "",
         date1: "",
@@ -148,17 +155,25 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传头像图片只能是 JPG 格式!");
+      // }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+      // return isJPG && isLt2M;
+      return isLt2M;
     },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+     handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -200,11 +215,7 @@ export default {
   line-height: 178px;
   text-align: center;
 }
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
+
 
 .editor /deep/ .el-form-item__content {
   line-height: unset;
@@ -231,6 +242,11 @@ export default {
     height: 40px;
 
 }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 .autocreate>.tips{
     display: block;
     width:337px;
