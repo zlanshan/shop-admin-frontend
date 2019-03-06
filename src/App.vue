@@ -16,14 +16,17 @@ export default {
   name: 'app',
   mounted(){
     this.$axios.get('/admin/account/islogin').then(res=>{
-      // console.log(res);
+      console.log(res);
       // 这个在每次刷新时都需要重新登录，接口有bug
       if(res.data.code==='nologin'){
+        // console.log(res);
         this.$message({
           message:'请先登录',
           type:'danger'
         });
         // this.$router.push('/login');
+      }else{
+
       }
     })
   }

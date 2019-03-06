@@ -37,7 +37,7 @@ var routes = [
         meta: '管理后台',
         children: [{ path: 'goodslist', component: Goodslist, meta: '商城管理' },
             { path: 'goodsadd', component: Goodsadd, meta: '添加商品' },
-            { path: 'goodsedit', component: Goodsedit, meta: '编辑商品' },
+            { path: 'goodsedit/:id', component: Goodsedit, meta: '编辑商品' },
 
             { path: 'categorylist', component: Categorylist, meta: '栏目管理' },
             { path: 'accountlist', component: Accountlist, meta: '会员列表' },

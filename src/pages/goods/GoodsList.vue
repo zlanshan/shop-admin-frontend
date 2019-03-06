@@ -46,7 +46,7 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          @click="handleEdit(scope.row.id)">编辑</el-button>
         <el-button
           size="mini"
           type="danger"
@@ -135,6 +135,9 @@ export default {
     handleSearch(str){
        this.pageIndex=1;
        this.getList();
+    },
+    handleEdit(id){
+      this.$router.push(`/admin/goodsedit/${id}`);
     },
     // 
     getList() {
