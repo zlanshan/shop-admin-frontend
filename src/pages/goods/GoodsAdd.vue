@@ -87,7 +87,7 @@
         </el-upload>
         <!-- 这是图片能预览的 -->
         <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogVisible" alt>
+          <img width="100%" :src="dialogImageUrl" alt>
         </el-dialog>
       </el-form-item>
 
@@ -121,6 +121,7 @@ export default {
   },
   data() {
     return {
+      // 封面图片预览图片的路径
       imageUrl: "",
       dialogImageUrl: "",
       dialogVisible: false,

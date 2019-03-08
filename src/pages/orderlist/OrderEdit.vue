@@ -81,7 +81,6 @@ export default {
           message:'修改成功',
           type:'success'
         })
-
         setTimeout(()=>{
           this.$router.back();
         },1000)
@@ -93,7 +92,7 @@ export default {
     const id = this.$route.params.id;
     this.id = id;
     this.$axios.get(`/admin/order/getorderdetial/${id}`).then(res=>{
-        // console.log(res);
+        console.log(res);
         const {message}=res.data;
         this.orderinfo=message.orderinfo;
         this.tableData=message.goodslist;

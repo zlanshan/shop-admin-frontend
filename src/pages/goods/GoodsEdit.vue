@@ -106,7 +106,7 @@
       </el-form-item>
       <!-- 按钮提交 -->
       <el-form-item style="text-align:left">
-        <el-button type="primary" @click="submitForm(formData)">立即创建</el-button>
+        <el-button type="primary" @click="submitForm(formData)">保存</el-button>
         <el-button @click="resetForm">取消</el-button>
       </el-form-item>
     </el-form>
@@ -202,18 +202,21 @@ export default {
           this.$message({
             message:'修改成功',
             type:'success'
-          })
-          setTimeout(function(){
-            this.$router.back();
+          });
+          // 箭头函数是指向上一作用域的this
+          // 用function的话定时器 this指向window
+          setTimeout(()=>{
+            this.$router.push('/admin/goodslist');
           },1000)
         }
       });
     },
-    // 清空的
+    // 返回到前一页
     resetForm() {
-      this.formData = {};
+      this.$router.push('/admin/goodslist');
     },
 
+    //  获取商品的所有分类信息
     choose:function (){
         this.$axios({
         method: "get",
@@ -253,6 +256,7 @@ export default {
    this.id=id;
    this.$axios({
      method:'get',
+    //  这个直接能写id是因为前面定义了id，而不仅仅是data中的id
      url:`/admin/goods/getgoodsmodel/${id}`,
      data:this.formData
    }).then(res=>{
@@ -266,9 +270,15 @@ export default {
       // 照片墙的话还没有设置有图片的单独属性，，只能是获取url路径来输出了
       this.formData.fileList=message.fileList.map(v=>{
         // 直接获取fileList中的url时，不能显示到完整的路径，不能自己匹配到，只能手动添加的
-        var file=v;
-        var url='http://127.0.0.1:8899'+v.shorturl;
-        return {file,url};
+        // var file=v;
+        // // 若是不设置这个，再次编辑更改提交后没有端口的话，就找不到图片的，这样的是将数据的name和shorturl属性无
+        // file.url='http://127.0.0.1:8899'+file.shorturl;
+        // v=file;
+        // return {v};
+        return {
+          ...v,
+          url:`http://127.0.0.1:8899${v.shorturl}`
+        }
       })
     
     }
