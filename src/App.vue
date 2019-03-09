@@ -15,7 +15,10 @@
 export default { 
   name: 'app',
   mounted(){
-    this.$axios.get('/admin/account/islogin').then(res=>{
+    this.$axios({
+      url:'/admin/account/islogin',
+       withCredentials: true
+      }).then(res=>{
       console.log(res);
       // 这个在每次刷新时都需要重新登录，接口有bug
       if(res.data.code==='nologin'){
@@ -24,9 +27,11 @@ export default {
           message:'请先登录',
           type:'danger'
         });
-        // this.$router.push('/login');
+        this.$router.push('/login');
       }else{
-
+        //  this.$message({
+        //    message:'你已登录，请不要重复登录的'
+        //  })
       }
     })
   }

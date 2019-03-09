@@ -2,17 +2,19 @@
   <div class="option">
     <!-- 会员名称搜索 -->
     <el-row class="input-with-select" type="flex" justify="end">
-      <el-select v-model="select" placeholder="请选择" style='margin-right:40px'>
-        <el-option label="餐厅名" value="1"></el-option>
-      <el-option label="订单号" value="2"></el-option>
-      <el-option label="用户电话" value="3"></el-option>
+      <el-select v-model="statusValue" placeholder="请选择" style='margin-right:40px' @change='handleChoose'>
+         <el-option
+         v-for="item in options"
+         :key="item.value"
+         :label="item.label"
+         :value="item.value">
+    </el-option>
       </el-select>
 
-      <el-input placeholder="会员名称" class="usersearch" style="width:250px">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input placeholder="会员名称" class="usersearch" style="width:250px" v-model="searchvalue">
+        <el-button slot="append" icon="el-icon-search" @click='handleSearch'></el-button>
       </el-input>
     </el-row>
-
     <!-- 表格 -->
     <el-table
       ref="multipleTable"
@@ -63,12 +65,33 @@ export default {
   data() {
     return {
       tableData: [],
-      multipleSelection: [],
-      select:'',
+      orderstatus:0,
+      searchvalue:'',
       pageIndex: 1,
       pageCount: 5,
       pageSize: 5,
-      totalCount: 0
+      totalCount: 0,
+      options:[{
+        value:0,
+        label:'全部'
+      },{
+        value:1,
+        label:'待付款'
+      },
+      {
+       value:2,
+       label:'已付款'
+      },{
+        value:3,
+        label:'已发货'
+      },{
+        value:4,
+        label:'已签收'
+      },{
+        value:5,
+        label:'取消'
+      }],
+      statusValue:''
     };
   },
 
@@ -76,13 +99,16 @@ export default {
     // 每页该显示的条数的处理函数
     handleSizeChange(val) {
       this.pageSize = val;
+      this.getOrderlist();
     },
     // 当前页跳转到另一页的处理函数
     handleCurrentChange(val) {
       this.pageIndex = val;
+      this.getOrderlist();
     },
     handleSelectionChange(data) {
       console.log(data);
+
     },
     handleEdit(id){
       // console.log(id);
@@ -93,10 +119,25 @@ export default {
       // console.log(id);
       this.$router.push(`/admin/orderdetail/${id}`);
     },
+    handleSearch(){
+      this.pageIndex=1;
+      this.getOrderlist();
+    },
+    handleChoose(val){
+      this.orderstatus=val;
+      this.getOrderlist();
+    },
     getOrderlist(){
-      this.$axios.get("http://127.0.0.1:8899/admin/order/getorderlist?orderstatus=2&vipname=ivanyb&pageIndex=1&pageSize=10").then(res=>{
+      this.$axios
+      ({url:"http://127.0.0.1:8899/admin/order/getorderlist",
+      params:{orderstatus:this.orderstatus,
+      pageIndex:this.pageIndex,
+      pageSize:this.pageSize,
+      vipname:this.searchvalue
+      }
+      }).then(res=>{
         console.log(res);
-        const {data}=res;
+        const {message,pageIndex,pageSize,totalcount}=res.data;
         this.totalCount=data.totalcount;
         this.tableData=data.message;
       })

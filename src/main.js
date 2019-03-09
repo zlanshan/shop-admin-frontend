@@ -23,6 +23,11 @@ import Goodsedit from './pages/goods/GoodsEdit.vue';
 import Orderedit from './pages/orderlist/OrderEdit.vue';
 
 import Orderdetail from './pages/orderlist/OrderDetail.vue';
+
+// 引入vuex的仓库,还要挂载store，这与router是一致的
+import store from './store';
+
+
 // 全局注册组件
 Vue.use(ElementUI);
 // 注册插件
@@ -64,5 +69,6 @@ axios.defaults.baseURL = "http://127.0.0.1:8899";
 Vue.prototype.$axios = axios;
 new Vue({
     router,
+    store,
     render: h => h(App),
 }).$mount('#app');

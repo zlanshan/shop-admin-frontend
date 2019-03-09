@@ -2,7 +2,9 @@
   <div>
     <el-form ref="form" :model="form" label-width="80px" class="mt20">
     <el-form-item label="所属类别">
+        <!-- v-model='defaultId' -->
        <el-cascader
+     
         expand-trigger="hover"
         :options="data"
         :show-all-levels="false"
@@ -43,6 +45,7 @@
 export default {
   data() {
     return {
+      defaultId:[],
         id:'',
         // 编辑所需要的请求体
       form: {
@@ -116,6 +119,7 @@ export default {
          if(status===0){
             //  message是一个数组，在这要获取就需是通过索引获取，，而不直接是message
              this.form=message[0];
+            //  this.defaultId=message[0].id;
          }
      })
 

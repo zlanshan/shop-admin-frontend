@@ -33,40 +33,39 @@
         var name=this.loginData.uname;
         var pwd=this.loginData.upwd;
        
-        if(this.checked=true){
-          this.setCookie(name,pwd,7);
-        }
-        this.$axios({
-        method:'post',
-        url:'/admin/account/login',
-        data: this.loginData,
-        withCredentials: true,
-      }).then(res=>{
-        // console.log(res);
-        // 或者是换成解构的思路  let {status,message}=res.data;
-        // if(res.data.status===0){
-        //   this.$message({
-        //   message:'登录成功',
-        //   type:'success'
-        // })
-        // this.$router.back();
-        // }
-      //  在这里message是用户登录的信息，，不是提示类的信息
-       const {status,message}=res.data;
-       if(status===0){
-         this.$message({
-           message:'登录成功',
-           type:'success'
-         })
-         this.$router.back();
-       }else{
-         this.$message({
-           message:message,
-           type:'warning'
-         })
-       }
-      })
+        this.$store.dispatch('user/login',this.loginData);
       },
+      //   this.$axios({
+      //   method:'post',
+      //   url:'/admin/account/login',
+      //   data: this.loginData,
+      //   withCredentials: true,
+      // }).then(res=>{
+      //   // console.log(res);
+      //   // 或者是换成解构的思路  let {status,message}=res.data;
+      //   // if(res.data.status===0){
+      //   //   this.$message({
+      //   //   message:'登录成功',
+      //   //   type:'success'
+      //   // })
+      //   // this.$router.back();
+      //   // }
+      // //  在这里message是用户登录的信息，，不是提示类的信息
+      //  const {status,message}=res.data;
+      //  if(status===0){
+      //    this.$message({
+      //      message:'登录成功',
+      //      type:'success'
+      //    })
+      //    this.$router.back();
+      //  }else{
+      //    this.$message({
+      //      message:message,
+      //      type:'warning'
+      //    })
+      //  }
+      // })
+      // },
       resetForm() {
        this.loginData={
           uname:'',
