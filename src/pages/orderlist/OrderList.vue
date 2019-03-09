@@ -22,7 +22,7 @@
       tooltip-effect="dark"
       style="width: 100%"
       class="mt20"
-      @selection-change="handleSelectionChange(data)"
+      @selection-change="handleSelectionChange(tableData)"
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="订单id" width="120" prop="id"></el-table-column>
@@ -138,8 +138,8 @@ export default {
       }).then(res=>{
         console.log(res);
         const {message,pageIndex,pageSize,totalcount}=res.data;
-        this.totalCount=data.totalcount;
-        this.tableData=data.message;
+        this.totalCount=totalcount;
+        this.tableData=message;
       })
     }
   },

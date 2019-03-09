@@ -21,8 +21,8 @@ export default {
       }).then(res=>{
       console.log(res);
       // 这个在每次刷新时都需要重新登录，接口有bug
+      // 怎么这个再次未拦截呢，，这不是入口函数嘛2，所有的都要经此，但是直接输入网址也可以进来呢？？
       if(res.data.code==='nologin'){
-        // console.log(res);
         this.$message({
           message:'请先登录',
           type:'danger'

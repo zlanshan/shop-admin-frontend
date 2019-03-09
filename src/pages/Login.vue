@@ -33,7 +33,9 @@
         var name=this.loginData.uname;
         var pwd=this.loginData.upwd;
        
-        this.$store.dispatch('user/login',this.loginData);
+        this.$store.dispatch('user/login',this.loginData).then(res=>{
+          this.$router.back();
+        });
       },
       //   this.$axios({
       //   method:'post',
